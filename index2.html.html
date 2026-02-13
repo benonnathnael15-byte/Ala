@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Be My Valentine?</title>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+:root {
+    --paper: #fdfaf6;
+    --pink: #ffafcc;
+    --dark-pink: #fb6f92;
+    --grid: #eeeeee;
+}
+
+body {
+    background-color: #121212;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Georgia', serif;
+    overflow: hidden;
+}
+
+.tablet {
+    width: 95vw;
+    max-width: 450px;
+    height: 85vh;
+    background: var(--paper);
+    background-image: radial-gradient(var(--grid) 2px, transparent 2px);
+    background-size: 20px 20px;
+    border: 10px solid #222;
+    border-radius: 40px;
+    position: relative;
+    box-shadow: 0 0 50px rgba(0,0,0,0.8);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.page {
+    display: none;
+    padding: 20px;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow-y: auto;
+}
+
+.active { display: flex; }
+
+h1 { font-size: 1.3rem; color: #444; margin-bottom: 15px; }
+
+button {
+    background: var(--pink);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+    color: white;
+    box-shadow: 0 4px 0 var(--dark-pink);
+    margin: 5px;
+}
+
+button:active { transform: translateY(4px); box-shadow: none; }
+
+.btn-no {
+    background: #adb5bd;
+    box-shadow: 0 4px 0 #6c757d;
+    position: relative;
+}
+
+.gift-box {
+    width: 90%;
+    background: white;
+    border: 2px dashed var(--pink);
+    margin: 8px 0;
+    padding: 12px;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.heart-icon {
+    font-size: 50px;
+    cursor: pointer;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* 🌸 Flower animation */
+.flower {
+    position: fixed;
+    top: -10px;
+    font-size: 20px;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="tablet">
+    <div id="p1" class="page active">
+        <h1 style="color:var(--dark-pink)">A Surprise for You...</h1>
+        <div class="heart-icon" onclick="showPage('p2')">💝</div>
+        <p>Tap the heart to open</p>
+    </div>
+
+    <div id="p2" class="page">
+        <h1>Will you be my Valentine?</h1>
+        <div style="display:flex; position:relative;">
+            <button onclick="accept()">YES!</button>
+            <button id="no-btn" class="btn-no">NO</button>
+        </div>
+    </div>
+
+    <div id="p3" class="page">
+        <h1>Yay ❤️</h1>
+
+        <div class="gift-box" onclick="showLetter()">💌 Read My Letter</div>
+
+        <div class="gift-box" onclick="openSong()">🎵 Play Your Song</div>
+
+        <button onclick="location.reload()" style="margin-top:15px;background:#ddd;color:#666;box-shadow:none">Restart</button>
+    </div>
+</div>
+
+<script>
+function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+
+function accept() {
+    showPage('p3');
+
+    confetti({
+        particleCount: 200,
+        spread: 90,
+        origin: { y: 0.6 }
+    });
+
+    startFlowers();
+
+    setTimeout(openSong, 2000);
+}
+
+function openSong() {
+    window.open("https://www.youtube.com/results?search_query=Love+Me+Not+BJ+Lips", "_blank");
+}
+
+/* NO button movement (PC + Phone) */
+function moveNo() {
+    const btn = document.getElementById('no-btn');
+    const x = Math.random() * 200 - 100;
+    const y = Math.random() * 200 - 100;
+    btn.style.position = "absolute";
+    btn.style.transform = `translate(${x}px, ${y}px)`;
+}
+
+document.getElementById("no-btn").addEventListener("mouseenter", moveNo);
+document.getElementById("no-btn").addEventListener("touchstart", function(e){
+    e.preventDefault();
+    moveNo();
+});
+
+/* 🌸 Flower rain */
+function startFlowers() {
+    setInterval(() => {
+        const flower = document.createElement("div");
+        flower.classList.add("flower");
+        flower.innerText = "🌸";
+        flower.style.left = Math.random() * 100 + "vw";
+        flower.style.animationDuration = (3 + Math.random() * 3) + "s";
+        document.body.appendChild(flower);
+
+        setTimeout(() => flower.remove(), 6000);
+    }, 300);
+}
+
+/* 💌 Love Letter */
+function showLetter() {
+    alert(`My Love ❤️
+
+It still feels crazy that we met on Roblox.
+
+Two random players.
+Two different countries.
+Ethiopia 🇪🇹 and the UK 🇬🇧.
+
+But somehow, we connected.
+
+It has only been one month,
+yet you already mean so much to me.
+
+When you told me your favorite song is
+"Love Me Not",
+I thought about something…
+
+I don’t love you maybe.
+I don’t love you sometimes.
+I don’t love you not.
+
+I just love you.
+
+Distance may separate us,
+but feelings don’t understand miles.
+
+Thank you for choosing me.
+And I promise —
+this is only the beginning ❤️`);
+}
+</script>
+
+</body>
+</html>
